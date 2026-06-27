@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+/*
+  ============================================================================
+  QUE DU KHEIR — Design tokens (DA extraite de quedukheir.com + Instagram)
+  ----------------------------------------------------------------------------
+  Source réelle : palette bordeaux/crème + Archivo Black + Cardo (cf. récap §5).
+  TOUT est centralisé ici pour un re-skin trivial quand la vraie charte arrivera.
+  Radius lock : cartes = rounded-2xl (1rem) · boutons = pill · inputs = rounded-xl
+  Un seul accent : bordeaux. Pas de motif cultuel. Laïque, chaleureux, digne.
+  ============================================================================
+*/
+
+@theme {
+  /* — Palette de marque (extraite) — */
+  --color-cream: #efe6d4; /* fond clair dominant, crème chaude réelle */
+  --color-cream-soft: #f4eee0; /* cartes/sections claires */
+  --color-sable: #e4dccb; /* beige moyen, séparations, surfaces */
+  --color-bordeaux: #7f1112; /* ACCENT unique : CTA, liens, marque */
+  --color-bordeaux-deep: #5e0c0d; /* hover/active du bordeaux */
+  --color-marron: #300303; /* sections sombres, near-black chaud */
+  --color-encre: #241817; /* texte courant, brun-noir doux */
+  --color-gris: #6a5d54; /* texte secondaire (AA sur crème : ~5:1) */
+  --color-gris-soft: #8a7d72; /* libellés discrets (large text only) */
+
+  /* — Couleurs data-viz (tons chauds dérivés, dashboard transparence) — */
+  --color-data-1: #7f1112; /* bordeaux */
+  --color-data-2: #b5654b; /* terre cuite */
+  --color-data-3: #c7972f; /* ocre/or */
+  --color-data-4: #4f6f52; /* olive (touche solidaire sobre) */
+  --color-data-5: #8a5a3c; /* brun caramel */
+  --color-data-6: #9aa07d; /* sauge claire */
+
+  /* — Statut — */
+  --color-positif: #4f6f52;
+  --color-alerte: #c7972f;
+
+  /* — Typo (next/font) — */
+  --font-display: var(--font-archivo-black); /* Archivo Black : police du logo */
+  --font-serif: var(--font-cardo); /* Cardo : éditorial, leur serif */
+  --font-sans: var(--font-hanken); /* Hanken Grotesk : corps humaniste */
+
+  /* — Rayons (lock documenté) — */
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+
+  /* — Ombres teintées au brun (jamais noir pur sur crème) — */
+  --shadow-soft: 0 1px 2px rgba(48, 3, 3, 0.04), 0 8px 24px -12px rgba(48, 3, 3, 0.12);
+  --shadow-lift: 0 2px 4px rgba(48, 3, 3, 0.06), 0 18px 40px -16px rgba(48, 3, 3, 0.18);
+}
+
+:root {
+  --background: var(--color-cream);
+  --foreground: var(--color-encre);
+}
+
+@layer base {
+  * {
+    border-color: color-mix(in srgb, var(--color-marron) 12%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "kern", "liga";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display), system-ui, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Focus clavier visible — accessibilité (cible personnes âgées) */
+  :focus-visible {
+    outline: 3px solid var(--color-bordeaux);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-bordeaux) 22%, transparent);
+    color: var(--color-marron);
+  }
+}
+
+@layer utilities {
+  .rule-fine {
+    border-color: color-mix(in srgb, var(--color-marron) 14%, transparent);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Voile chaud sur photos de terrain pour lisibilité du texte */
+  .scrim-warm {
+    background: linear-gradient(
+      180deg,
+      rgba(48, 3, 3, 0.05) 0%,
+      rgba(48, 3, 3, 0.35) 55%,
+      rgba(48, 3, 3, 0.78) 100%
+    );
+  }
+
+  .scrim-side {
+    background: linear-gradient(
+      90deg,
+      rgba(48, 3, 3, 0.82) 0%,
+      rgba(48, 3, 3, 0.5) 45%,
+      rgba(48, 3, 3, 0.05) 100%
+    );
+  }
+}
+
+/* Accordéon (Radix) — ouverture/fermeture douce */
+@keyframes acc-down {
+  from { height: 0; opacity: 0; }
+  to { height: var(--radix-accordion-content-height); opacity: 1; }
+}
+@keyframes acc-up {
+  from { height: var(--radix-accordion-content-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+
+/* Respect strict de prefers-reduced-motion (digne, accessible) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
