@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TEMOIGNAGES } from "@/lib/data";
@@ -9,7 +9,6 @@ import { TEMOIGNAGES } from "@/lib/data";
 /** Carrousel de témoignages — placeholders étiquetés (à recueillir). */
 export function TestimonialSlider() {
   const [i, setI] = React.useState(0);
-  const reduce = useReducedMotion();
   const t = TEMOIGNAGES[i];
   const go = (d: number) => setI((p) => (p + d + TEMOIGNAGES.length) % TEMOIGNAGES.length);
 
@@ -20,9 +19,9 @@ export function TestimonialSlider() {
         <AnimatePresence mode="wait">
           <motion.blockquote
             key={i}
-            initial={reduce ? false : { opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -12 }}
+            exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="font-[family-name:var(--font-serif)] text-[clamp(1.25rem,2.5vw,1.6rem)] leading-snug text-encre text-balance">

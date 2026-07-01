@@ -7,6 +7,9 @@ import { Footer } from "@/components/layout/footer";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { MobileActionBar } from "@/components/layout/mobile-action-bar";
 import { OrganizationJsonLd } from "@/components/brand/json-ld";
+import { SmoothScroll } from "@/app/providers/smooth-scroll";
+import { Cursor } from "@/components/anim/cursor";
+import { MotionConfig } from "motion/react";
 import { SITE } from "@/lib/site";
 
 /* Polices réelles extraites du site : Archivo Black (logo) + Cardo (éditorial),
@@ -76,6 +79,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <body className="flex min-h-full flex-col">
         <OrganizationJsonLd />
+        {/* reducedMotion="user" : la réduction est appliquée APRÈS hydratation,
+            de façon cohérente serveur/client → pas de mismatch, et l'initial des
+            composants motion reste constant (cf. fix accessibilité). */}
+        <MotionConfig reducedMotion="user">
         <AuthProvider>
           <a
             href="#contenu"
@@ -85,12 +92,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </a>
           <AnnouncementBar />
           <Header />
-          <main id="contenu" className="flex-1">
-            {children}
-          </main>
+          <SmoothScroll>
+            <main id="contenu" className="flex-1">
+              {children}
+            </main>
+          </SmoothScroll>
           <Footer />
           <MobileActionBar />
+          <Cursor />
         </AuthProvider>
+        </MotionConfig>
       </body>
     </html>
   );

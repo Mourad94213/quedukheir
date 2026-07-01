@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
+import { motion, type HTMLMotionProps } from "motion/react";
 import * as React from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -24,12 +24,13 @@ export function Reveal({
   className?: string;
   as?: "div" | "li" | "section" | "article" | "span";
 } & Omit<HTMLMotionProps<"div">, "ref">) {
-  const reduce = useReducedMotion();
+  // initial CONSTANT (pas de branche reduced-motion) → SSR === client, aucun
+  // mismatch d'hydratation. La réduction est gérée par <MotionConfig reducedMotion="user">.
   const MotionTag = motion[as] as typeof motion.div;
   return (
     <MotionTag
       className={className}
-      initial={reduce ? false : { opacity: 0, y }}
+      initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.65, delay, ease: EASE }}
@@ -50,7 +51,6 @@ export function RevealGroup({
   className?: string;
   stagger?: number;
 }) {
-  const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
@@ -59,7 +59,7 @@ export function RevealGroup({
       viewport={{ once: true, amount: 0.2 }}
       variants={{
         hidden: {},
-        show: { transition: { staggerChildren: reduce ? 0 : stagger } },
+        show: { transition: { staggerChildren: stagger } },
       }}
     >
       {children}
@@ -76,12 +76,11 @@ export function RevealItem({
   className?: string;
   y?: number;
 }) {
-  const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
       variants={{
-        hidden: reduce ? { opacity: 1 } : { opacity: 0, y },
+        hidden: { opacity: 0, y },
         show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
       }}
     >

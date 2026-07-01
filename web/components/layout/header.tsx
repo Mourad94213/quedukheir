@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Heart, UserRound } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,6 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
-  const reduce = useReducedMotion();
 
   React.useEffect(() => setOpen(false), [pathname]);
 
@@ -95,9 +94,9 @@ export function Header() {
         {open && (
           <motion.div
             className="fixed inset-0 top-[68px] z-40 overflow-y-auto bg-cream lg:hidden"
-            initial={reduce ? false : { opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
             <nav className="flex flex-col gap-1 px-4 py-6" aria-label="Navigation mobile">

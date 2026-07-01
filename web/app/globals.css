@@ -125,6 +125,26 @@
   }
 }
 
+/* Ken Burns doux pour le hero (zoom/pan lent, digne). Désactivé en reduced-motion. */
+@keyframes ken-burns {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to { transform: scale(1.08) translate3d(-1.5%, -1.5%, 0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ken-burns {
+    animation: ken-burns 18s ease-in-out infinite alternate;
+  }
+}
+
+/* Lenis : pendant le smooth scroll, on neutralise le scroll natif concurrent. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
 /* Accordéon (Radix) — ouverture/fermeture douce */
 @keyframes acc-down {
   from { height: 0; opacity: 0; }
