@@ -202,8 +202,8 @@ export const DONS_MENSUELS = [
 
 /* — Agenda : prochaines actions (DÉMO, à valider) — */
 export const EVENEMENTS = [
-  { date: "2026-12-13", titre: "Maraude de décembre", type: "Maraude", lieu: "Métro Stalingrad", ville: "Paris 19e", places: 6, statut: "Inscriptions ouvertes" },
-  { date: "2026-12-20", titre: "Distribution kits d'hygiène — hiver", type: "Distribution", lieu: "Centre-ville", ville: "Saint-Denis (93)", places: 8, statut: "Inscriptions ouvertes" },
+  { date: "2026-12-13", titre: "Maraude de décembre", type: "Maraude", lieu: "Métro Stalingrad", ville: "Paris 19e", places: 6, statut: "Confirmée" },
+  { date: "2026-12-20", titre: "Distribution kits d'hygiène — hiver", type: "Distribution", lieu: "Centre-ville", ville: "Saint-Denis (93)", places: 8, statut: "Confirmée" },
   { date: "2027-01-10", titre: "Maraude de janvier", type: "Maraude", lieu: "Gare du Nord", ville: "Paris 10e", places: 6, statut: "Bientôt" },
   { date: "2027-01-24", titre: "Préparation collecte alimentaire", type: "Logistique", lieu: "Local associatif", ville: "Aubervilliers (93)", places: 10, statut: "Bientôt" },
   { date: "2027-02-07", titre: "Maraude de février", type: "Maraude", lieu: "Place de la République", ville: "Paris 11e", places: 6, statut: "Bientôt" },
@@ -289,9 +289,21 @@ export const ADHERENTS_DEMO = [
   { nom: "Y. Haddad", statut: "À jour", depuis: "2026-06" },
 ] as const;
 
-/* — Inscriptions bénévoles reçues (table démo, espace bureau) — */
-export const BENEVOLES_DEMO = [
-  { nom: "Inès R.", dispo: "Week-ends", competences: "Logistique", vehicule: true, recu: "2026-11-20" },
-  { nom: "Marc T.", dispo: "Soirs en semaine", competences: "Maraude, écoute", vehicule: false, recu: "2026-11-18" },
-  { nom: "Sofia B.", dispo: "1 fois / mois", competences: "Communication", vehicule: true, recu: "2026-11-15" },
-] as const;
+/* — Dons reçus (table démo, espace bureau) — saisie manuelle possible — */
+export type DonRecu = {
+  date: string;
+  donateur: string;
+  canal: string;
+  montant: number;
+};
+
+export const DONS_RECUS: DonRecu[] = [
+  { date: "2026-11-22", donateur: "Karim B.", canal: "HelloAsso", montant: 50 },
+  { date: "2026-11-20", donateur: "Anonyme", canal: "Espèces (maraude)", montant: 20 },
+  { date: "2026-11-18", donateur: "Famille Moreau", canal: "Virement", montant: 120 },
+  { date: "2026-11-12", donateur: "Sofia B.", canal: "HelloAsso", montant: 30 },
+  { date: "2026-11-05", donateur: "Don entreprise locale", canal: "Chèque", montant: 300 },
+];
+
+/* — Canaux de don proposés lors d'une saisie manuelle — */
+export const CANAUX_DON = ["HelloAsso", "Virement", "Espèces (maraude)", "Chèque", "Autre"] as const;

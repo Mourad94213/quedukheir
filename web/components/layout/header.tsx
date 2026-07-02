@@ -112,12 +112,6 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
-              <Link
-                href="/benevoles"
-                className="rounded-2xl px-4 py-4 text-xl font-semibold text-encre transition-colors hover:bg-encre/[0.04]"
-              >
-                Devenir bénévole
-              </Link>
               <div className="mt-4 flex flex-col gap-3 border-t border-marron/10 pt-6">
                 <Button asChild size="lg" variant="secondary">
                   <Link href="/connexion">

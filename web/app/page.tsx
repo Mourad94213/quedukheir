@@ -7,7 +7,6 @@ import {
   HandHeart,
   Mail,
   Phone,
-  Sparkles,
   Package,
   Footprints,
   Ear,
@@ -31,11 +30,10 @@ import { SplitHeading } from "@/components/anim/split-heading";
 import { NarrativeText } from "@/components/anim/narrative-text";
 import { RevealMask } from "@/components/anim/reveal-mask";
 import { Parallax } from "@/components/anim/parallax";
-import { Marquee } from "@/components/anim/marquee";
 import { HorizontalScroll } from "@/components/anim/horizontal-scroll";
 import { Magnetic } from "@/components/anim/magnetic";
 import { ACTIONS, TRANSPARENCE_RESUME, POSTES, GALERIE } from "@/lib/data";
-import { SITE, VALEURS } from "@/lib/site";
+import { SITE } from "@/lib/site";
 import { euros, pct } from "@/lib/utils";
 
 /* — Le parcours d'une maraude : storytelling épinglé (factuel, non chiffré) — */
@@ -80,24 +78,17 @@ export default function HomePage() {
   return (
     <>
       {/* ============================ HERO ÉDITORIAL ============================ */}
-      <section className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-[1500px] items-center gap-10 px-4 pb-10 pt-8 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-20 lg:pt-14">
+      <section className="relative flex items-center overflow-hidden lg:min-h-[calc(100svh-104px)]">
+        <div className="mx-auto grid w-full max-w-[1500px] items-center gap-10 px-4 pb-12 pt-8 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:py-12">
           {/* Colonne texte */}
           <div className="relative z-10">
-            <Reveal y={16}>
-              <Badge variant="sable" className="mb-6">
-                <Sparkles className="size-3.5" />
-                {SITE.legal} · {SITE.territory}
-              </Badge>
-            </Reveal>
-
             <SplitHeading
               as="h1"
               type="lines"
               yPercent={120}
               stagger={0.14}
               duration={1.1}
-              className="font-[family-name:var(--font-display)] uppercase leading-[0.92] tracking-[-0.02em] text-[clamp(2.8rem,8.5vw,6.25rem)] text-encre"
+              className="font-[family-name:var(--font-display)] uppercase leading-[0.94] tracking-[-0.02em] text-[clamp(2.6rem,7.2vw,5.25rem)] text-encre"
             >
               <>
                 L'entraide,
@@ -108,12 +99,12 @@ export default function HomePage() {
               </>
             </SplitHeading>
 
-            <Reveal y={20} delay={0.5}>
-              <p className="mt-7 max-w-lg text-lg leading-relaxed text-gris text-pretty sm:text-xl">
+            <Reveal y={20} delay={0.3}>
+              <p className="mt-6 max-w-lg text-lg leading-relaxed text-gris text-pretty sm:text-xl">
                 Une jeune association qui lutte contre la précarité et l'exclusion en
                 Seine-Saint-Denis et à Paris. Maraudes, kits d'hygiène, fournitures scolaires.
               </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Magnetic strength={0.4}>
                   <Button asChild size="lg">
                     <Link href="/faire-un-don">
@@ -131,7 +122,7 @@ export default function HomePage() {
                   </Button>
                 </Magnetic>
               </div>
-              <p className="mt-10 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-gris-soft">
+              <p className="mt-8 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-gris-soft">
                 <ArrowDown className="size-4 animate-bounce" aria-hidden />
                 Faites défiler
               </p>
@@ -208,27 +199,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ===================== MARQUEE VALEURS (défilante) ===================== */}
-      <div className="border-y border-marron/10 bg-marron py-6 text-cream sm:py-8">
-        <Marquee duration={26}>
-          {VALEURS.map((v) => (
-            <span
-              key={v.titre}
-              className="mx-7 inline-flex items-center gap-7 font-[family-name:var(--font-serif)] text-3xl font-bold sm:text-5xl"
-            >
-              {v.titre}
-              <span
-                aria-hidden
-                className="text-2xl sm:text-4xl"
-                style={{ color: "var(--color-data-3)" }}
-              >
-                ✦
-              </span>
-            </span>
-          ))}
-        </Marquee>
-      </div>
 
       {/* ===================== IMPACT (compteurs animés, bande sombre) ===================== */}
       <section className="bg-encre">
@@ -543,39 +513,10 @@ export default function HomePage() {
         <TestimonialSlider />
       </section>
 
-      {/* ===================== BÉNÉVOLES + CONTACT (accès simple, hors réseaux) ===================== */}
+      {/* ===================== CONTACT (accès simple, hors réseaux) ===================== */}
       <section className="mx-auto max-w-[1500px] px-4 pb-24 sm:px-6">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Reveal className="flex flex-col justify-between rounded-3xl border border-marron/10 bg-cream-soft p-8 sm:p-12">
-            <div>
-              <SplitHeading
-                as="h2"
-                scroll
-                type="lines"
-                className="font-[family-name:var(--font-display)] uppercase leading-[0.95] text-[clamp(1.8rem,4.5vw,3rem)] text-encre"
-              >
-                <>
-                  Donnez un peu
-                  <br />
-                  de votre temps
-                </>
-              </SplitHeading>
-              <SectionLede>
-                Maraudes, logistique, collectes : il y a une place pour chacun. On vous recontacte
-                via WhatsApp.
-              </SectionLede>
-            </div>
-            <Magnetic strength={0.3} className="mt-10 self-start">
-              <Button asChild size="lg">
-                <Link href="/benevoles">
-                  <HandHeart className="size-5" />
-                  Devenir bénévole
-                </Link>
-              </Button>
-            </Magnetic>
-          </Reveal>
-
-          <Reveal delay={0.1} className="rounded-3xl bg-marron p-8 text-cream sm:p-12">
+        <div className="grid gap-6">
+          <Reveal className="rounded-3xl bg-marron p-8 text-cream sm:p-12">
             <h2 className="font-[family-name:var(--font-serif)] text-[clamp(1.8rem,4vw,2.6rem)] font-bold leading-[1.08] text-cream">
               Une question ? Parlons-en.
             </h2>

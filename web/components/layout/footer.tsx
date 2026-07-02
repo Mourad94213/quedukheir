@@ -19,7 +19,6 @@ const COLS = [
     titre: "Agir",
     links: [
       { href: "/faire-un-don", label: "Faire un don" },
-      { href: "/benevoles", label: "Devenir bénévole" },
       { href: "/agenda", label: "Agenda des maraudes" },
       { href: "/galerie", label: "Galerie" },
     ],

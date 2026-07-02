@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Heart, HandHeart, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPin } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/motion/reveal";
 import { StatCounter } from "@/components/motion/stat-counter";
 import { SectionLede } from "@/components/brand/section-title";
@@ -235,41 +233,10 @@ export default function QuiSommesNousPage() {
         </div>
       </section>
 
-      {/* ===================== DOUBLE CTA (don sobre + bénévole) ===================== */}
+      {/* ===================== CTA DON (sobre) ===================== */}
       <section className="bg-cream">
         <div className="mx-auto max-w-[1500px] px-4 py-20 sm:px-6 sm:py-28">
           <DonationCallout />
-          <Reveal>
-            <div className="mt-6 flex flex-col items-center justify-between gap-6 rounded-3xl border border-marron/10 bg-cream-soft p-8 text-center sm:flex-row sm:text-left sm:p-10">
-              <div className="flex items-start gap-4">
-                <span className="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-bordeaux/10 text-bordeaux">
-                  <HandHeart className="size-6" />
-                </span>
-                <div>
-                  <h2 className="font-[family-name:var(--font-serif)] text-xl font-bold text-encre">
-                    Envie de nous rejoindre ?
-                  </h2>
-                  <p className="mt-1.5 text-gris">
-                    Quelques heures par mois suffisent. On vous recontacte simplement, via WhatsApp.
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg">
-                  <Link href="/benevoles">
-                    <Heart className="size-5" />
-                    Devenir bénévole
-                  </Link>
-                </Button>
-                <Button asChild size="lg" variant="secondary">
-                  <Link href="/nos-actions">
-                    Voir nos actions
-                    <ArrowRight className="size-5" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </Reveal>
         </div>
       </section>
     </>

@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, Plus, Save, Wallet, Users, HandHeart } from "lucide-react";
+import { LogOut, Plus, Save, Wallet, Users } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Input, Select } from "@/components/ui/input";
 import { Field } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, THead, TBody, TR, TH, TD } from "@/components/ui/table";
@@ -17,7 +17,9 @@ import {
   DEPENSES,
   POSTES,
   ADHERENTS_DEMO,
-  BENEVOLES_DEMO,
+  DONS_RECUS,
+  CANAUX_DON,
+  type DonRecu,
 } from "@/lib/data";
 import { euros, dateLong } from "@/lib/utils";
 
@@ -29,10 +31,17 @@ export default function AdminPage() {
   const router = useRouter();
   const { user, ready, logout } = useAuth();
 
-  // État du mini formulaire (démo : ne persiste rien).
+  // État du mini formulaire dépense (démo : ne persiste rien).
   const [poste, setPoste] = useState("");
   const [montant, setMontant] = useState("");
   const [desc, setDesc] = useState("");
+
+  // Saisie manuelle des dons entrants (démo : local à la session, non persisté).
+  const [dons, setDons] = useState<DonRecu[]>(DONS_RECUS);
+  const [donDate, setDonDate] = useState("");
+  const [donDonateur, setDonDonateur] = useState("");
+  const [donCanal, setDonCanal] = useState<string>(CANAUX_DON[0]);
+  const [donMontant, setDonMontant] = useState("");
 
   useEffect(() => {
     if (ready && !user) {
@@ -65,6 +74,28 @@ export default function AdminPage() {
     e.preventDefault();
     alert("Démo: brancher le back-office");
   }
+
+  // Ajoute un don entrant à la liste locale (démo). Branchement HelloAsso/compta au build.
+  function handleAddDon(e: React.FormEvent) {
+    e.preventDefault();
+    const montantNum = Number(donMontant);
+    if (!donDonateur.trim() || !Number.isFinite(montantNum) || montantNum <= 0) return;
+    setDons((prev) => [
+      {
+        date: donDate || new Date().toISOString().slice(0, 10),
+        donateur: donDonateur.trim(),
+        canal: donCanal,
+        montant: montantNum,
+      },
+      ...prev,
+    ]);
+    setDonDate("");
+    setDonDonateur("");
+    setDonCanal(CANAUX_DON[0]);
+    setDonMontant("");
+  }
+
+  const totalDons = dons.reduce((s, d) => s + d.montant, 0);
 
   function handleSave() {
     alert("Démo : aucune écriture réelle. La sauvegarde sera branchée au build.");
@@ -103,9 +134,9 @@ export default function AdminPage() {
               </Button>
             </div>
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-gris text-pretty">
-              Aperçu d'un back-office : dons, dépenses, adhérents et bénévoles.
-              Toutes les données sont fictives et aucune modification n'est
-              enregistrée.
+              Aperçu d'un back-office : dons entrants, dépenses et adhérents.
+              Toutes les données sont fictives et seule la saisie de dons est
+              gardée le temps de la session (aucune écriture réelle).
             </p>
           </Reveal>
         </div>
@@ -123,15 +154,112 @@ export default function AdminPage() {
               <Users className="size-4" />
               Adhérents
             </TabsTrigger>
-            <TabsTrigger value="benevoles">
-              <HandHeart className="size-4" />
-              Bénévoles
-            </TabsTrigger>
           </TabsList>
 
           {/* ---------- DONS & DÉPENSES ---------- */}
           <TabsContent value="dons">
             <div className="space-y-8">
+              {/* Dons reçus + saisie manuelle */}
+              <Card className="p-6">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="font-[family-name:var(--font-serif)] text-xl font-bold text-encre">
+                      Dons reçus
+                    </h2>
+                    <p className="mt-1 text-sm text-gris">
+                      Saisissez manuellement un don entrant (espèces en maraude, chèque,
+                      virement…). Il s'ajoute à la liste ci-dessous.
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-gris">
+                      Total (démo)
+                    </p>
+                    <p className="font-[family-name:var(--font-display)] text-2xl text-bordeaux">
+                      {euros(totalDons)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Formulaire de saisie manuelle d'un don */}
+                {/* TODO brancher HelloAsso/compta pour la persistance réelle */}
+                <form
+                  onSubmit={handleAddDon}
+                  className="mt-5 grid gap-4 sm:grid-cols-[150px_1fr_180px_140px_auto] sm:items-end"
+                >
+                  <Field label="Date" htmlFor="don-date">
+                    <Input
+                      id="don-date"
+                      type="date"
+                      value={donDate}
+                      onChange={(e) => setDonDate(e.target.value)}
+                    />
+                  </Field>
+                  <Field label="Donateur" htmlFor="don-donateur">
+                    <Input
+                      id="don-donateur"
+                      value={donDonateur}
+                      onChange={(e) => setDonDonateur(e.target.value)}
+                      placeholder="Nom ou « Anonyme »"
+                    />
+                  </Field>
+                  <Field label="Canal" htmlFor="don-canal">
+                    <Select
+                      id="don-canal"
+                      value={donCanal}
+                      onChange={(e) => setDonCanal(e.target.value)}
+                    >
+                      {CANAUX_DON.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </Select>
+                  </Field>
+                  <Field label="Montant (€)" htmlFor="don-montant">
+                    <Input
+                      id="don-montant"
+                      type="number"
+                      min="1"
+                      value={donMontant}
+                      onChange={(e) => setDonMontant(e.target.value)}
+                      placeholder="50"
+                    />
+                  </Field>
+                  <Button type="submit">
+                    <Plus className="size-5" />
+                    Ajouter
+                  </Button>
+                </form>
+
+                <div className="mt-6">
+                  <Table>
+                    <THead>
+                      <TR>
+                        <TH>Date</TH>
+                        <TH>Donateur</TH>
+                        <TH>Canal</TH>
+                        <TH className="text-right">Montant</TH>
+                      </TR>
+                    </THead>
+                    <TBody>
+                      {dons.map((d, i) => (
+                        <TR key={`${d.date}-${d.donateur}-${i}`}>
+                          <TD className="whitespace-nowrap text-gris">{dateLong(d.date)}</TD>
+                          <TD className="font-medium text-encre">{d.donateur}</TD>
+                          <TD>
+                            <Badge variant="outline">{d.canal}</Badge>
+                          </TD>
+                          <TD className="whitespace-nowrap text-right font-semibold text-encre">
+                            {euros(d.montant)}
+                          </TD>
+                        </TR>
+                      ))}
+                    </TBody>
+                  </Table>
+                </div>
+              </Card>
+
               {/* Journal des dépenses (éditable en apparence) */}
               <Card className="p-6">
                 <div className="flex flex-wrap items-center justify-between gap-3">
@@ -307,55 +435,6 @@ export default function AdminPage() {
                         </TD>
                         <TD className="whitespace-nowrap text-gris">
                           {a.depuis}
-                        </TD>
-                      </TR>
-                    ))}
-                  </TBody>
-                </Table>
-              </div>
-            </Card>
-          </TabsContent>
-
-          {/* ---------- BÉNÉVOLES ---------- */}
-          <TabsContent value="benevoles">
-            <Card className="p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h2 className="font-[family-name:var(--font-serif)] text-xl font-bold text-encre">
-                    Bénévoles
-                  </h2>
-                  <p className="mt-1 text-sm text-gris">
-                    Inscriptions reçues (démonstration).
-                  </p>
-                </div>
-                <Badge variant="demo">Démo</Badge>
-              </div>
-              <div className="mt-5">
-                <Table>
-                  <THead>
-                    <TR>
-                      <TH>Nom</TH>
-                      <TH>Disponibilité</TH>
-                      <TH>Compétences</TH>
-                      <TH>Véhicule</TH>
-                      <TH>Reçu le</TH>
-                    </TR>
-                  </THead>
-                  <TBody>
-                    {BENEVOLES_DEMO.map((b) => (
-                      <TR key={b.nom}>
-                        <TD className="font-medium text-encre">{b.nom}</TD>
-                        <TD className="whitespace-nowrap text-gris">
-                          {b.dispo}
-                        </TD>
-                        <TD className="text-gris">{b.competences}</TD>
-                        <TD>
-                          <Badge variant={b.vehicule ? "positif" : "outline"}>
-                            {b.vehicule ? "Oui" : "Non"}
-                          </Badge>
-                        </TD>
-                        <TD className="whitespace-nowrap text-gris">
-                          {dateLong(b.recu)}
                         </TD>
                       </TR>
                     ))}

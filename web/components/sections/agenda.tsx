@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { MapPin, Users, ArrowRight } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { EVENEMENTS } from "@/lib/data";
 
@@ -16,14 +15,14 @@ function DateBlock({ iso }: { iso: string }) {
 }
 
 export function EventCard({ event }: { event: (typeof EVENEMENTS)[number] }) {
-  const ouvert = event.statut === "Inscriptions ouvertes";
+  const confirme = event.statut === "Confirmée";
   return (
     <article className="flex items-center gap-4 rounded-2xl border border-marron/10 bg-cream-soft p-4 shadow-soft transition-shadow hover:shadow-lift">
       <DateBlock iso={event.date} />
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="sable">{event.type}</Badge>
-          <Badge variant={ouvert ? "positif" : "outline"}>{event.statut}</Badge>
+          <Badge variant={confirme ? "positif" : "outline"}>{event.statut}</Badge>
         </div>
         <h3 className="mt-1.5 font-[family-name:var(--font-serif)] text-lg font-bold leading-tight text-encre">
           {event.titre}
@@ -32,18 +31,8 @@ export function EventCard({ event }: { event: (typeof EVENEMENTS)[number] }) {
           <span className="inline-flex items-center gap-1">
             <MapPin className="size-3.5" /> {event.lieu}, {event.ville}
           </span>
-          <span className="inline-flex items-center gap-1">
-            <Users className="size-3.5" /> {event.places} bénévoles
-          </span>
         </p>
       </div>
-      <Link
-        href="/benevoles"
-        className="hidden shrink-0 items-center gap-1 rounded-full border border-encre/20 px-4 py-2 text-sm font-semibold text-encre transition-colors hover:border-bordeaux hover:text-bordeaux sm:inline-flex"
-      >
-        Participer
-        <ArrowRight className="size-3.5" />
-      </Link>
     </article>
   );
 }

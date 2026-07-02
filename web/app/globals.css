@@ -55,6 +55,18 @@
   --foreground: var(--color-encre);
 }
 
+/* Curseur custom actif (pointeur fin) : on masque TOTALEMENT le curseur natif
+   pour ne garder que le nôtre, sans superposition. La classe `has-custom-cursor`
+   est posée en JS uniquement quand un pointeur fin + hover est détecté
+   (cf. components/anim/cursor.tsx) → tactile / reduced-motion gardent le natif.
+   Règle hors @layer pour garantir la priorité et un rechargement propre. */
+html.has-custom-cursor,
+html.has-custom-cursor *,
+html.has-custom-cursor *::before,
+html.has-custom-cursor *::after {
+  cursor: none !important;
+}
+
 @layer base {
   * {
     border-color: color-mix(in srgb, var(--color-marron) 12%, transparent);

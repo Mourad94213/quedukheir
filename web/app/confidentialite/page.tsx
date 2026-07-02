@@ -44,19 +44,19 @@ export default function ConfidentialitePage() {
             <Bloc titre="Les données que nous collectons">
               <p>
                 Nous ne collectons que les informations que vous nous transmettez volontairement, via
-                nos formulaires de contact et d'inscription bénévole :
+                notre formulaire de contact :
               </p>
               <ul className="ml-5 list-disc space-y-1.5">
                 <li>votre nom (ou prénom),</li>
                 <li>un moyen de vous recontacter (email, téléphone),</li>
-                <li>le contenu de votre message ou vos disponibilités et compétences.</li>
+                <li>le contenu de votre message.</li>
               </ul>
             </Bloc>
 
             <Bloc titre="Pourquoi nous les collectons">
               <p>
-                Ces informations servent uniquement à vous répondre, à organiser les actions de
-                terrain et à coordonner les bénévoles. Rien de plus.
+                Ces informations servent uniquement à vous répondre et à organiser les actions de
+                terrain. Rien de plus.
               </p>
             </Bloc>
 
