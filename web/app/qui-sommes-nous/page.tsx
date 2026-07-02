@@ -164,8 +164,8 @@ export default function QuiSommesNousPage() {
             </div>
 
             <RevealGroup className="grid gap-4 sm:grid-cols-2">
-              {BUREAU.map((m) => (
-                <RevealItem key={m.nom + m.role}>
+              {BUREAU.map((m, i) => (
+                <RevealItem key={`${m.nom}-${m.role}-${i}`}>
                   <div className="flex h-full items-center gap-4 rounded-2xl border border-marron/10 bg-cream-soft p-5">
                     <span
                       className="inline-flex size-14 shrink-0 items-center justify-center rounded-full bg-bordeaux text-cream font-[family-name:var(--font-serif)] text-lg font-bold"
